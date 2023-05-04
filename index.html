@@ -1,34 +1,35 @@
-<html>
+{% for post in paginator.posts %}
+  <html>
+  
 <head>
   <meta name="google-signin-client_id" content="716328353330-gfbund65tq4c9nnc2atkb7sh6fruhjfd.apps.googleusercontent.com">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <script src="https://apis.google.com/js/api:client.js"></script>
   <script>
-    var googleUser = {};
-    var startApp = function() {
-      gapi.load('auth2', function(){
-        // Retrieve the singleton for the GoogleAuth library and set up the client.
-        auth2 = gapi.auth2.init({
-          client_id: '716328353330-gfbund65tq4c9nnc2atkb7sh6fruhjfd.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-          // Request scopes in addition to 'profile' and 'email'
-          //scope: 'additional_scope'
-        });
-        attachSignin(document.getElementById('customBtn'));
+  var googleUser = {};
+  var startApp = function() {
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '716328353330-gfbund65tq4c9nnc2atkb7sh6fruhjfd.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        // Request scopes in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
       });
-    };
+      attachSignin(document.getElementById('customBtn'));
+    });
+  };
 
-    function attachSignin(element) {
-      console.log(element.id);
-      auth2.attachClickHandler(element, {},
-          function(googleUser) {
-            document.getElementById('name').innerText = "Signed in: " +
-                googleUser.getBasicProfile().getName();
-            document.getElementById('jekyllFrontMatter').innerText = "---\nlayout: home\n---";
-          }, function(error) {
-            alert(JSON.stringify(error, undefined, 2));
-          });
-    }
+  function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+          document.getElementById('name').innerText = "Signed in: " +
+              googleUser.getBasicProfile().getName();
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+  }
   </script>
   <style type="text/css">
     body {
@@ -59,7 +60,7 @@
       font-weight: normal;
     }
     span.icon {
-      background: url('/assets/img/Google-Symbol.png') transparent 5px 50% no-repeat;
+      background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
       display: inline-block;
       vertical-align: middle;
       width: 42px;
@@ -76,7 +77,27 @@
       font-family: 'Roboto', sans-serif;
     }
   </style>
-</head>
-<body>
-<div
+  </head>
+  <body>
+  <div id="gSignInWrapper">
+    <div id="customBtn" class="customGPlusSignIn">
+      <span class="icon"></span>
+      <span class="buttonText">Sign in with Google</span>
+    </div>
+  </div>
+  <div id="name"></div>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+  <script>startApp();</script>
+</body>
+</html>
+{% endfor %}
+
+<div class="pagination">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path }}" class="previous-page">&laquo; Previous</a>
+  {% endif %}
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path }}" class="next-page">Next &raquo;</a>
+  {% endif %}
+</div>
 
